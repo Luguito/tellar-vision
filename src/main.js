@@ -5,6 +5,7 @@ import { bottomCenterLogo, topLeftLogo } from './logos'
 
 // Obtain actual host (localhost o any domain)
 const baseUrl = window.location.origin;
+const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
 
 // Create a scene using JS
 const sceneEl = document.createElement('a-scene');
@@ -62,6 +63,12 @@ sceneEl.addEventListener('loaded', () => {
 
   const { scene: threeScene, camera: threeCamera, renderer } = mindarThree;
 
+  if (isMobile) {
+    renderer.setPixelRatio(window.devicePixelRatio * 0.75); // Reducir la resolución en móviles
+  } else {
+    renderer.setPixelRatio(window.devicePixelRatio); // Resolución completa en escritorio
+  }
+
   // Create Loader for the FaceMesh
   const textureLoader = new THREE.TextureLoader();
   // Import Filter
@@ -81,7 +88,7 @@ sceneEl.addEventListener('loaded', () => {
   threeScene.add(bottomCenterLogo);
 
   // Create Snowflakes (Imported from snow.js)
-  const snowFlakes = new SnowFlakes({ snowfall: 1500 });
+  const snowFlakes = new SnowFlakes({ snowfall: isMobile ? 500 : 1500 });
 
   threeScene.add(snowFlakes);
 

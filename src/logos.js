@@ -2,6 +2,7 @@ import * as THREE from 'three';
 
 const textureLoader = new THREE.TextureLoader();
 const baseUrl = window.location.origin;
+const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
 
 // Load logo textures
 const topLeftLogoTexture = textureLoader.load(`${baseUrl}/logo_brand.png`);
@@ -22,5 +23,11 @@ const bottomCenterLogo = new THREE.Mesh(
 // Position the logos
 topLeftLogo.position.set(-0.42, 0.17, -1);    // Top-left
 bottomCenterLogo.position.set(0, -0.16, -1); // Bottom-center
+
+console.log(isMobile)
+if (isMobile) {
+    topLeftLogo.position.set(-0.15, 0.25, -1);
+    bottomCenterLogo.position.set(0, -0.2, -1);
+}
 
 export { topLeftLogo, bottomCenterLogo };
