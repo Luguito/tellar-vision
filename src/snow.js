@@ -56,10 +56,12 @@ sceneEl.addEventListener('loaded', () => {
 
     // Crear FaceMesh
     const textureLoader = new THREE.TextureLoader();
-    const blushTexture = textureLoader.load('http://localhost:3000/last-filter.png');
+    // Obtener el host actual
+    const baseUrl = window.location.origin;
+    const blushTexture = textureLoader.load(`${baseUrl}/filter.png`);
     // Cargar texturas de los logos
-    const topLeftLogoTexture = textureLoader.load('http://localhost:3000/logo_brand.png');
-    const bottomCenterLogoTexture = textureLoader.load('http://localhost:3000/name-brand.png');
+    const topLeftLogoTexture = textureLoader.load(`${baseUrl}/logo_brand.png`);
+    const bottomCenterLogoTexture = textureLoader.load(`${baseUrl}/name-brand.png`);
 
     // Crear el logo superior izquierdo
     const topLeftLogo = new THREE.Mesh(
