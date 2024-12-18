@@ -1,6 +1,10 @@
 import * as THREE from 'three';
 import { MindARThree } from 'mindar-face-three';
 
+
+// Obtener el host actual
+const baseUrl = window.location.origin;
+
 // Crear la escena A-Frame desde JS
 const sceneEl = document.createElement('a-scene');
 sceneEl.setAttribute('mindar-face', '');
@@ -14,9 +18,9 @@ sceneEl.setAttribute('device-orientation-permission-ui', 'enabled: false');
 const assets = document.createElement('a-assets');
 assets.innerHTML = `
   <a-asset-item id="headModel" src="https://cdn.jsdelivr.net/gh/hiukim/mind-ar-js@1.2.5/examples/face-tracking/assets/sparkar/headOccluder.glb"></a-asset-item>
-  <a-asset-item id="chrismasHat" src="http://localhost:3000/hat.glb"></a-asset-item>
-  <a-asset-item id="chrismasHat2" src="http://localhost:3000/gorro.gltf"></a-asset-item>
-  <a-asset-item id="filter" src="http://localhost:3000/last-filter.png"></a-asset-item>
+  <a-asset-item id="chrismasHat" src="${baseUrl}/hat.glb"></a-asset-item>
+  <a-asset-item id="chrismasHat2" src="${baseUrl}/gorro.gltf"></a-asset-item>
+  <a-asset-item id="filter" src="${baseUrl}/last-filter.png"></a-asset-item>
 `;
 sceneEl.appendChild(assets);
 
@@ -56,8 +60,7 @@ sceneEl.addEventListener('loaded', () => {
 
     // Crear FaceMesh
     const textureLoader = new THREE.TextureLoader();
-    // Obtener el host actual
-    const baseUrl = window.location.origin;
+
     const blushTexture = textureLoader.load(`${baseUrl}/filter.png`);
     // Cargar texturas de los logos
     const topLeftLogoTexture = textureLoader.load(`${baseUrl}/logo_brand.png`);
@@ -90,44 +93,6 @@ sceneEl.addEventListener('loaded', () => {
     });
 
     threeScene.add(faceMesh);
-    function createFrostPlane() {
-        const frostMaterial = new THREE.ShaderMaterial({
-            uniforms: {},
-            vertexShader: `
-            varying vec2 vUv;
-      
-            void main() {
-              vUv = uv;
-              gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
-            }
-          `,
-            fragmentShader: `
-            varying vec2 vUv;
-      
-            void main() {
-              float edgeThickness = 0.05; // Grosor del borde
-              float distanceToEdge = min(vUv.x, min(1.0 - vUv.x, min(vUv.y, 1.0 - vUv.y)));
-              float edgeMask = smoothstep(edgeThickness, edgeThickness * 2.0, distanceToEdge);
-      
-              vec3 iceColor = vec3(0.8, 0.9, 1.0); // Color de hielo
-              gl_FragColor = vec4(iceColor, 1.0 - edgeMask);
-            }
-          `,
-            transparent: true
-        });
-
-        // Crear el plano y posicionarlo frente a la cámara
-        const frostPlane = new THREE.Mesh(new THREE.PlaneGeometry(2, 2), frostMaterial);
-        frostPlane.position.set(0, 0, -1); // Justo frente a la cámara
-
-        return frostPlane;
-    }
-
-
-    // Crear y posicionar el frostPlane
-    const frostPlane = createFrostPlane();
-
-    threeScene.add(frostPlane);
 
     class SnowFlakes extends THREE.Object3D {
         constructor(params) {
@@ -143,7 +108,7 @@ sceneEl.addEventListener('loaded', () => {
                 textureLoader.load('https://dl.dropbox.com/s/cs17pph4bu096k7/snowflake3.png?dl=0'),
                 textureLoader.load('https://dl.dropbox.com/s/plwtcfvokuoz931/snowflake4.png?dl=0'),
                 textureLoader.load('https://dl.dropbox.com/s/uhh77omqdwqo2z5/snowflake5.png?dl=0'),
-                textureLoader.load('http://localhost:3000/logo_brand.png'),
+                textureLoader.load(`${baseUrl}/logo_brand.png`),
             ];
 
             // Crear geometrías y materiales separados para cada textura
