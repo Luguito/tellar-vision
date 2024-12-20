@@ -7,7 +7,7 @@ import { bottomCenterLogo, topLeftLogo } from './logos'
 const baseUrl = window.location.origin;
 const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
 function goFullScreen() {
-    const element = document.documentElement; // O el canvas de tu escena AR
+    const element = document.documentElement; // scene AR
     if (element.requestFullscreen) {
         element.requestFullscreen();
     } else if (element.mozRequestFullScreen) { // Firefox
@@ -105,6 +105,11 @@ sceneEl.addEventListener('loaded', () => {
 
   threeScene.add(snowFlakes);
 
+  // Get button ref to trigger fullscreen
+  const buttonRef = document.getElementById("fullscreen")
+  buttonRef.onclick = () => {
+      goFullScreen()
+  }
   // Start animation and init the whole scene
   const start = async () => {
     await mindarThree.start();
@@ -115,5 +120,4 @@ sceneEl.addEventListener('loaded', () => {
   };
 
   start();
-  goFullScreen()
 });
