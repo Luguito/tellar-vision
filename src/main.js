@@ -6,6 +6,19 @@ import { bottomCenterLogo, topLeftLogo } from './logos'
 // Obtain actual host (localhost o any domain)
 const baseUrl = window.location.origin;
 const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+function goFullScreen() {
+    const element = document.documentElement; // O el canvas de tu escena AR
+    if (element.requestFullscreen) {
+        element.requestFullscreen();
+    } else if (element.mozRequestFullScreen) { // Firefox
+        element.mozRequestFullScreen();
+    } else if (element.webkitRequestFullscreen) { // Chrome, Safari, Edge
+        element.webkitRequestFullscreen();
+    } else if (element.msRequestFullscreen) { // IE/Edge
+        element.msRequestFullscreen();
+    }
+}
+
 
 // Create a scene using JS
 const sceneEl = document.createElement('a-scene');
@@ -102,4 +115,5 @@ sceneEl.addEventListener('loaded', () => {
   };
 
   start();
+  goFullScreen()
 });
